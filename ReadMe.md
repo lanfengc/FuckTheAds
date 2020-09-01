@@ -15,13 +15,15 @@ https://www.microsoft.com/zh-cn/edge
 ~~~ Javascript
 // ==UserScript==
 // @name         视频广告加速/VIP自动解析
-// @namespace    http://www.mdmsoft.cn/
+// @namespace    http://Microsoft.com/
 // @version      1.0
-// @description  看个教程，腾讯 优酷视频广告贼烦人，竟然有120秒，不干掉它真是对不起自己程序猿的职业!
-// @author       @MdmSoft
+// @description  看个教程，腾讯 优酷视频广告贼烦人，竟然有90秒，不干掉它真是对不起自己程序猿的称号!
+// @author       @Microsoft
 // @match        https://v.qq.com/*
+// @match        https://m.v.qq.com/*
 // @match        https://v.youku.com/*
 // @match        https://www.iqiyi.com/*
+// @match        https://m.iqiyi.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -40,6 +42,7 @@ var jiexiApiUrl = "https://z1.m1907.cn/?jx=";
 var nowLocationHref = location.href;
 //注入的视频播放器对象
 var playerInject;
+
 //注入播放器
 function injectPlayer(divId) {
     playerInject = document.getElementById('playerInject');
@@ -75,6 +78,7 @@ function resizePlayer(divId) {
         playerInject.style.height = playRect.height + 'px';
     }
 }
+
 //腾讯视频注入
 function injectTencent(divClassName) {
     var qqTips = document.getElementsByClassName(divClassName);
@@ -98,6 +102,7 @@ setInterval(function() {
             location.reload();
         }
     }
+    //循环变量  广告时间
     var i,adTimes;
     if (window.location.href.indexOf('www.iqiyi.com') != -1) {
         //爱奇艺广告加速通过
@@ -106,6 +111,7 @@ setInterval(function() {
             if (o[i].src != '') {
                 //爱奇艺广告倒计时DIV classname
                 adTimes = document.getElementsByClassName('cupid-public-time');
+                //如果广告时间不为空，且广告是显示的，则16倍速播放
                 if (adTimes && adTimes.length>0 && adTimes[0].style.display == "") {
                     o[i].playbackRate = 16.0;
                 }
@@ -121,7 +127,7 @@ setInterval(function() {
         //拿到爱奇艺VIP的黑色遮罩（VIP视频直接不让试看的）
         var vipPops = document.getElementsByClassName('qy-player-vippay-popup');
         if(vipSides && vipSides.length>0 || iqyTips && iqyTips.length>0 || vipPops && vipPops.length>0){
-            //标志位，标志两个VIP状态
+            //标志位，标志三个VIP状态
             var isVipSideShown=false, isVipTipsShown=false, isVipPopShow=false;
             for (i = 0; i < vipSides.length; i++) {
                 if (vipSides[i].style.display == '' && vipSides[i].innerText.indexOf('开通VIP会员') != -1) {
@@ -157,6 +163,23 @@ setInterval(function() {
         }
         //注入后，跟随外部DIV变大或变小
         resizePlayer('flashbox');
+    }
+    else if (window.location.href.indexOf('m.iqiyi.com') != -1) {
+        //爱奇艺广告加速通过
+        o = document.getElementsByTagName('video');
+        for (i = 0; i < o.length; i++) {
+            if (o[i].src != '') {
+                //爱奇艺广告倒计时DIV classname
+                adTimes = document.getElementsByClassName('normal-public-time');
+                //如果广告时间不为空，且广告是显示的，则16倍速播放
+                if (adTimes && adTimes.length>0 && adTimes[0].style.display == "block") {
+                    o[i].playbackRate = 16.0;
+                }
+                else{
+                    o[i].playbackRate = 1.0;
+                }
+            }
+        }
     }
     else if (window.location.href.indexOf('v.qq.com') != -1) {
         //腾讯视频广告加速通过
@@ -198,6 +221,23 @@ setInterval(function() {
         }
         //重新设置注入的播放器大小
         resizePlayer('tenvideo_player');
+    }
+    else if (window.location.href.indexOf('m.v.qq.com') != -1) {
+        //腾讯广告加速通过
+        o = document.getElementsByTagName('video');
+        for (i = 0; i < o.length; i++) {
+            if (o[i].src != '') {
+                //广告倒计时DIV classname
+                adTimes = document.getElementsByClassName('txp_ad_countdown');
+                //如果广告时间不为1，且广告是显示的，则16倍速播放
+                if (adTimes && adTimes.length>0 && adTimes[0].innerText != "1") {
+                    o[i].playbackRate = 16.0;
+                }
+                else{
+                    o[i].playbackRate = 1.0;
+                }
+            }
+        }
     }
 }, 200);
 ~~~
