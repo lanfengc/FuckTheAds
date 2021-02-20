@@ -16,7 +16,7 @@ https://www.microsoft.com/zh-cn/edge
 // ==UserScript==
 // @name         视频广告加速/VIP自动解析
 // @namespace    http://Microsoft.com/
-// @version      1.0
+// @version      1.2
 // @description  看个教程，腾讯 优酷视频广告贼烦人，竟然有90秒，不干掉它真是对不起自己程序猿的称号!
 // @author       @Microsoft
 // @match        https://v.qq.com/*
@@ -96,29 +96,19 @@ setInterval(function() {
     //如果浏览器href变更，则刷新页面
     if (nowLocationHref != location.href) {
         nowLocationHref = location.href;
-        console.log('href changed to ' + nowLocationHref);
+        //console.log('href changed to ' + nowLocationHref);
         if (playerInject) {
-            console.log('injected, reload!');
+            //console.log('injected, reload!');
             location.reload();
         }
     }
     //循环变量  广告时间
     var i,adTimes;
     if (window.location.href.indexOf('www.iqiyi.com') != -1) {
-        //爱奇艺广告加速通过
-        var o = document.getElementsByTagName('video');
-        for (i = 0; i < o.length; i++) {
-            if (o[i].src != '') {
-                //爱奇艺广告倒计时DIV classname
-                adTimes = document.getElementsByClassName('cupid-public-time');
-                //如果广告时间不为空，且广告是显示的，则16倍速播放
-                if (adTimes && adTimes.length>0 && adTimes[0].style.display == "") {
-                    o[i].playbackRate = 16.0;
-                }
-                else{
-                    o[i].playbackRate = 1.0;
-                }
-            }
+        //爱奇艺广告直接跳过
+        if (document.getElementsByClassName("cupid-public-time")[0] != null) {
+            document.getElementsByClassName('skippable-after')[0].style.display="block";
+            document.getElementsByClassName("skippable-after")[0].click();
         }
         //拿到爱奇艺播放页右侧的VIP提示
         var vipSides = document.getElementsByClassName('qy-player-side-vip');
@@ -166,7 +156,7 @@ setInterval(function() {
     }
     else if (window.location.href.indexOf('m.iqiyi.com') != -1) {
         //爱奇艺广告加速通过
-        o = document.getElementsByTagName('video');
+        var o = document.getElementsByTagName('video');
         for (i = 0; i < o.length; i++) {
             if (o[i].src != '') {
                 //爱奇艺广告倒计时DIV classname
@@ -200,6 +190,7 @@ setInterval(function() {
                     else{
                         //如果倒计时DIV存在，且当前播放是视频，则加速，直到视频广告DIV消失
                         videos[i].playbackRate = 16;
+                        //videos[i].currentTime = 1000;
                     }
                 }
             }
