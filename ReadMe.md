@@ -29,15 +29,15 @@ https://www.microsoft.com/zh-cn/edge
 
 
 //解析接口API地址
-var jiexiApiArray = ["https://jx.du2.cc/?url=",
-                     "https://jx.618g.com/?url=",
-                     "https://www.8090g.cn/jiexi/?url=",
-                     "https://8090.ylybz.cn/jiexi/?url=",
-                     "https://jiexi.bm6ig.cn/?url="]
+var jiexiApiArray = ["https://api.jiexi.la/?url=",
+                     "https://www.pangujiexi.cc/jiexi.php?url==",
+                     "https://z1.m1907.cn/?jx=",
+                     "https://www.h8jx.com/jiexi.php?url=",
+                     "https://www.ckplayer.vip/jiexi/?url="]
 //随机一个解析接口
 //var jiexiApiUrl = jiexiApiArray[Math.round(Math.random()*jiexiApiArray.length,0)];
 //使用固定的解析接口（这个比较稳定）
-var jiexiApiUrl = "https://z1.m1907.cn/?jx=";
+var jiexiApiUrl = "https://www.pangujiexi.cc/jiexi.php?url=";
 //当前页面href
 var nowLocationHref = location.href;
 //注入的视频播放器对象
